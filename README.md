@@ -6,7 +6,7 @@ DXL(Domino XML Language) export/import tool in VBScript.
 
 You can export your HCL Notes database design into DXL(XML) file, so that you can manage design changes in text( using GitHub for example ).
 
-You can also import your result into HCL Notes database(NSF) again from any git log history(still not working).
+You can also import your result into HCL Notes database(NSF) again from any git log history(still under development).
 
 
 ## Pre-requisite
@@ -104,7 +104,7 @@ You can also import your result into HCL Notes database(NSF) again from any git 
   - Edit `dxl_export.vbs` as `nc.SelectDocuments = **True**`
 
 
-## How to import(still not working)
+## How to import(still under development)
 
 - Run `dxl_import.vbs` with your target XML file **full** path( `dev_sample.nsf\sample.xml`, for example ):
 

@@ -104,7 +104,7 @@ You can also import your result into HCL Notes database(NSF) again from any git 
   - Edit `dxl_export.vbs` as `nc.SelectDocuments = **True**`
 
 
-## How to import(still under development)
+## How to import
 
 - Run `dxl_import.vbs` with your target XML file **full** path( `dev_sample.nsf\sample.xml`, for example ):
 
@@ -113,6 +113,8 @@ You can also import your result into HCL Notes database(NSF) again from any git 
   - **(Caution)** You need to specify this **c:\Windows\SysWOW64** full path in 64bit Windows(otherwise 32bit CScript.exe will be launched).
   
 - If you are asked your Notes' password, enter it
+
+- Error message(`NotesDXLImporter: DXL importer operation failed`) might be displayed, but you don't have to mind it at this moment.
 
 - If succeeded, created result filepath would be shown:
 

@@ -1,5 +1,5 @@
 ' dxl_import.vbs
-' é¿çsï˚ñ@: c:\Windows\SysWOW64\CScript //nologo dxl_import.vbs path/xxxxx.xml
+' Execute: c:\Windows\SysWOW64\CScript //nologo dxl_import.vbs c:\Users\username\fullpath\xxxxx.xml
 Option Explicit
 
 Dim objWsh
@@ -55,7 +55,7 @@ Else
       dxlImporter.ReplaceDBProperties = True
       dxlImporter.ReplicaRequiredForReplaceOrUpdate = True 'False
       dxlImporter.ACLImportOption = 5
-      dxlImporter.DesignImportOption = 5
+      dxlImporter.DesignImportOption = 2
       'Call dxlImporter.Process
       Call dxlImporter.Import( stream, objNotesDb )
 

@@ -1,5 +1,5 @@
 ' dxl_export.vbs
-' é¿çsï˚ñ@: c:\Windows\SysWOW64\CScript //nologo dxl_export.vbs path/xxxxx.nsf
+' Execute: c:\Windows\SysWOW64\CScript //nologo dxl_export.vbs path/xxxxx.nsf
 Option Explicit
 
 Dim objWsh

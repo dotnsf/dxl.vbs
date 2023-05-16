@@ -19,6 +19,7 @@ Dim file
 Dim tmpArr, tmpStr, tmpInt
 Dim tmpDArr
 Dim i, c, encoding
+Dim selDocs
 
 Set objArgs = Wscript.Arguments
 If objArgs.Count = 0 Then
@@ -26,10 +27,13 @@ If objArgs.Count = 0 Then
 Else
   c = 0
   encoding = "SHIFT_JIS"
+  selDocs = False
   
   For i = 0 To objArgs.Count - 2
     If StartsWith( LCase( objArgs(i) ), "-encoding=" ) = 1 Then
       encoding = Mid( objArgs(i), 10 )
+    ElseIf StartsWith( LCase( objArgs(i) ), "-seldocs=" ) = 1 Then
+      selDocs = True
     End If
     c = c + 1
   Next
@@ -68,28 +72,28 @@ Else
   nc.SelectActions = True              'Action
   nc.SelectAgents = True               'Agents
   nc.SelectDatabaseScript = True       'DatabaseScript
-  nc.SelectDataConnections = True 'False     'DataConnections
-  nc.SelectDocuments = False           'Documents
+  nc.SelectDataConnections = True      'DataConnections
+  nc.SelectDocuments = selDocs         'Documents
   nc.SelectFolders = True              'Folders
   nc.SelectForms = True                'Forms
   nc.SelectFrameSets = True            'Framesets
-  nc.SelectHelpAbout = True 'False           'HelpAbout
-  nc.SelectHelpIndex = True 'False           'HelpIndex
-  nc.SelectHelpUsing = True 'False           'HelpUsing
-  nc.SelectIcon = True 'False                'HelpIcon
-  nc.SelectImageResources = True 'False      'ImageResources
+  nc.SelectHelpAbout = True            'HelpAbout
+  nc.SelectHelpIndex = True            'HelpIndex
+  nc.SelectHelpUsing = True            'HelpUsing
+  nc.SelectIcon = True                 'HelpIcon
+  nc.SelectImageResources = True       'ImageResources
   nc.SelectJavaResources = True        'JavaResources
-  nc.SelectMiscCodeElements = True 'False    'MiscCodeElements
-  nc.SelectMiscFormatElements = True 'False  'MiscFormatElements
-  nc.SelectMiscIndexElements = True 'False   'MiscIndexElements
+  nc.SelectMiscCodeElements = True     'MiscCodeElements
+  nc.SelectMiscFormatElements = True   'MiscFormatElements
+  nc.SelectMiscIndexElements = True    'MiscIndexElements
   nc.SelectNavigators = True           'Navigators
   nc.SelectOutlines = True             'Outlines
   nc.SelectPages = True                'Pages
-  nc.SelectProfiles = True 'False            'Profiles
+  nc.SelectProfiles = True             'Profiles
   nc.SelectReplicationFormulas = True  'ReplicationFormulas
   nc.SelectScriptLibraries = True      'ScriptLibraries
   nc.SelectSharedFields = True         'SharedFields
-  nc.SelectStyleSheetResources = True 'False 'StyleSheetResources
+  nc.SelectStyleSheetResources = True  'StyleSheetResources
   nc.SelectSubforms = True             'Subforms
   nc.SelectViews = True                'Views
 

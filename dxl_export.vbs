@@ -1,5 +1,5 @@
 ' dxl_export.vbs
-' Execute: c:\Windows\SysWOW64\CScript //nologo dxl_export.vbs path/xxxxx.nsf
+' Execute: c:\Windows\SysWOW64\CScript //nologo dxl_export.vbs [-encoding=SHIFT_JIS] path/xxxxx.nsf
 Option Explicit
 
 Dim objWsh
@@ -18,13 +18,24 @@ Dim file
 
 Dim tmpArr, tmpStr, tmpInt
 Dim tmpDArr
+Dim i, c, encoding
 
 Set objArgs = Wscript.Arguments
 If objArgs.Count = 0 Then
   Wscript.Echo "Please specify local database path as command line parameter."
 Else
+  c = 0
+  encoding = "SHIFT_JIS"
+  
+  For i = 0 To objArgs.Count - 2
+    If StartsWith( LCase( objArgs(i) ), "-encoding=" ) = 1 Then
+      encoding = Mid( objArgs(i), 10 )
+    End If
+    c = c + 1
+  Next
+  
   'local database filepath
-  objDbPath = objArgs(0)
+  objDbPath = objArgs(c)
   
   'normalize DB filepath
   tmpArr = Split( objDbPath, "\" )
@@ -90,7 +101,7 @@ Else
   
   'forced to Shift-JIS
   tmpArr = Split( dxl, "xml version='1.0'" )
-  dxl = Join( tmpArr, "xml version='1.0' encoding='SHIFT_JIS'" )
+  dxl = Join( tmpArr, "xml version='1.0' encoding='" & encoding & "'" )
   
   'Wscript.Echo dxl
   Set file = fso.CreateTextFile( outputFilePath, True, False )
@@ -101,3 +112,28 @@ Else
   Set fso = Nothing
   Set objNotesSession = Nothing
 End If
+
+
+Public Function StartsWith(target_str, search_str)
+  StartsWith = 0
+  If Len(search_str) > Len(target_str) Then
+    Exit Function
+  End If
+  
+  If Left(target_str, Len(search_str)) = search_str Then
+    StartsWith = 1
+  End If
+End Function
+
+Public Function EndsWith(target_str, search_str)
+  EndsWith = 0
+  If Len(search_str) > Len(target_str) Then
+    Exit Function
+  End If
+  
+  If Right(target_str, Len(search_str)) = search_str Then
+    EndsWith = 1
+  End If
+End Function
+
+

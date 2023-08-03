@@ -68,7 +68,7 @@ Else
   nc.SelectHelpAbout = True             'HelpAbout
   nc.SelectHelpIndex = True             'HelpIndex
   nc.SelectHelpUsing = True             'HelpUsing
-  nc.SelectIcon = True                  'HelpIcon
+  nc.SelectIcon = True                  'Icon
   nc.SelectImageResources = True        'ImageResources
   nc.SelectJavaResources = False        'JavaResources
   nc.SelectMiscCodeElements = False     'MiscCodeElements

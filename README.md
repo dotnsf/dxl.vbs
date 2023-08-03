@@ -47,9 +47,11 @@ You can also import your result into HCL Notes database(NSF) again from any git 
 
 - Run `dxl_export.vbs` with your target Notes DB file path( `dev/sample.nsf`, for example ):
 
-  - `> c:\Windows\SysWOW64\CScript //nologo dxl_export.vbs dev/sample.nsf`
+  - `> c:\Windows\SysWOW64\CScript //nologo dxl_export.vbs (-encoding=XXX) dev/sample.nsf`
   
   - **(Caution)** You need to specify this **c:\Windows\SysWOW64** full path in 64bit Windows(otherwise 32bit CScript.exe will be launched).
+  
+  - You can specify text encoding as XXX(Default: Shift_JIS)
   
 - If you are asked your Notes' password, enter it
 
@@ -108,9 +110,11 @@ You can also import your result into HCL Notes database(NSF) again from any git 
 
 - Run `dxl_import.vbs` with your target XML file **full** path( `dev_sample.nsf\sample.xml`, for example ):
 
-  - `> c:\Windows\SysWOW64\CScript //nologo dxl_import.vbs C:\Users\yourname\dev_sample.nsf\sample.xml`
+  - `> c:\Windows\SysWOW64\CScript //nologo dxl_import.vbs (-encoding=XXX) C:\Users\yourname\dev_sample.nsf\sample.xml`
   
   - **(Caution)** You need to specify this **c:\Windows\SysWOW64** full path in 64bit Windows(otherwise 32bit CScript.exe will be launched).
+  
+  - You can specify text encoding as XXX(Default: Shift_JIS)
   
 - If you are asked your Notes' password, enter it
 

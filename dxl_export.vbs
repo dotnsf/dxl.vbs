@@ -1,5 +1,5 @@
 ' dxl_export.vbs
-' Execute: c:\Windows\SysWOW64\CScript //nologo dxl_export.vbs path/xxxxx.nsf
+' Execute: c:\Windows\SysWOW64\CScript //nologo dxl_export.vbs [-encoding=SHIFT_JIS] path/xxxxx.nsf
 Option Explicit
 
 Dim objWsh
@@ -18,13 +18,28 @@ Dim file
 
 Dim tmpArr, tmpStr, tmpInt
 Dim tmpDArr
+Dim i, c, encoding
+Dim selDocs
 
 Set objArgs = Wscript.Arguments
 If objArgs.Count = 0 Then
   Wscript.Echo "Please specify local database path as command line parameter."
 Else
+  c = 0
+  encoding = "SHIFT_JIS"
+  selDocs = False
+  
+  For i = 0 To objArgs.Count - 2
+    If StartsWith( LCase( objArgs(i) ), "-encoding=" ) = 1 Then
+      encoding = Mid( objArgs(i), 10 )
+    ElseIf StartsWith( LCase( objArgs(i) ), "-seldocs=" ) = 1 Then
+      selDocs = True
+    End If
+    c = c + 1
+  Next
+  
   'local database filepath
-  objDbPath = objArgs(0)
+  objDbPath = objArgs(c)
   
   'normalize DB filepath
   tmpArr = Split( objDbPath, "\" )
@@ -57,28 +72,28 @@ Else
   nc.SelectActions = True              'Action
   nc.SelectAgents = True               'Agents
   nc.SelectDatabaseScript = True       'DatabaseScript
-  nc.SelectDataConnections = True 'False     'DataConnections
-  nc.SelectDocuments = False           'Documents
+  nc.SelectDataConnections = True      'DataConnections
+  nc.SelectDocuments = selDocs         'Documents
   nc.SelectFolders = True              'Folders
   nc.SelectForms = True                'Forms
   nc.SelectFrameSets = True            'Framesets
-  nc.SelectHelpAbout = True 'False           'HelpAbout
-  nc.SelectHelpIndex = True 'False           'HelpIndex
-  nc.SelectHelpUsing = True 'False           'HelpUsing
-  nc.SelectIcon = True 'False                'HelpIcon
-  nc.SelectImageResources = True 'False      'ImageResources
+  nc.SelectHelpAbout = True            'HelpAbout
+  nc.SelectHelpIndex = True            'HelpIndex
+  nc.SelectHelpUsing = True            'HelpUsing
+  nc.SelectIcon = True                 'HelpIcon
+  nc.SelectImageResources = True       'ImageResources
   nc.SelectJavaResources = True        'JavaResources
-  nc.SelectMiscCodeElements = True 'False    'MiscCodeElements
-  nc.SelectMiscFormatElements = True 'False  'MiscFormatElements
-  nc.SelectMiscIndexElements = True 'False   'MiscIndexElements
+  nc.SelectMiscCodeElements = True     'MiscCodeElements
+  nc.SelectMiscFormatElements = True   'MiscFormatElements
+  nc.SelectMiscIndexElements = True    'MiscIndexElements
   nc.SelectNavigators = True           'Navigators
   nc.SelectOutlines = True             'Outlines
   nc.SelectPages = True                'Pages
-  nc.SelectProfiles = True 'False            'Profiles
+  nc.SelectProfiles = True             'Profiles
   nc.SelectReplicationFormulas = True  'ReplicationFormulas
   nc.SelectScriptLibraries = True      'ScriptLibraries
   nc.SelectSharedFields = True         'SharedFields
-  nc.SelectStyleSheetResources = True 'False 'StyleSheetResources
+  nc.SelectStyleSheetResources = True  'StyleSheetResources
   nc.SelectSubforms = True             'Subforms
   nc.SelectViews = True                'Views
 
@@ -90,7 +105,7 @@ Else
   
   'forced to Shift-JIS
   tmpArr = Split( dxl, "xml version='1.0'" )
-  dxl = Join( tmpArr, "xml version='1.0' encoding='SHIFT_JIS'" )
+  dxl = Join( tmpArr, "xml version='1.0' encoding='" & encoding & "'" )
   
   'Wscript.Echo dxl
   Set file = fso.CreateTextFile( outputFilePath, True, False )
@@ -101,3 +116,28 @@ Else
   Set fso = Nothing
   Set objNotesSession = Nothing
 End If
+
+
+Public Function StartsWith(target_str, search_str)
+  StartsWith = 0
+  If Len(search_str) > Len(target_str) Then
+    Exit Function
+  End If
+  
+  If Left(target_str, Len(search_str)) = search_str Then
+    StartsWith = 1
+  End If
+End Function
+
+Public Function EndsWith(target_str, search_str)
+  EndsWith = 0
+  If Len(search_str) > Len(target_str) Then
+    Exit Function
+  End If
+  
+  If Right(target_str, Len(search_str)) = search_str Then
+    EndsWith = 1
+  End If
+End Function
+
+

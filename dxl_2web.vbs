@@ -7,12 +7,18 @@ Dim objArgs
 Dim objDbPath
 Dim objNotesSession
 Dim objNotesDb
+Dim objNotesView
+Dim objNotesViewEntry
+Dim objNotesViewEntryCollection
+Dim objNotesDoc
 Dim nc
 Dim dxlExporter
 Dim dxl
 
 Dim objXML
-Dim nodeList, obj, unid, nodeList0, obj0
+Dim nodeList, obj, unid, name, nodeList0, obj0
+Dim docUnids
+Dim vcc, cv
 
 Dim outputFileFolder, outputXMLFolder
 Dim outputFilePath, outputXMLPath
@@ -152,6 +158,34 @@ Else
       Set file = fso.CreateTextFile( outputXMLPath, True, False )
       file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & obj.xml )
       file.Close
+      
+      docUnids = ""
+      name = GetName( obj )
+      Set objNotesView = objNotesDb.getView( name )
+      Set objNotesViewEntryCollection = objNotesView.AllEntries
+      vcc = 1
+      
+      Set objNotesDoc = objNotesView.GetFirstDocument()
+      While Not ( objNotesDoc Is Nothing )
+        If docUnids = "" Then
+          docUnids = objNotesDoc.UniversalID
+        Else
+          docUnids = docUnids & vbCrLf & objNotesDoc.UniversalID
+        End If
+        
+        Set objNotesViewEntry = objNotesViewEntryCollection.getNthEntry( vcc )
+        cv = objNotesViewEntry.ColumnValues
+        docUnids = docUnids & "," & Join( cv, "," )
+        
+        Set objNotesDoc = objNotesView.GetNextDocument( objNotesDoc )
+        vcc = vcc + 1
+      Wend
+      
+      docUnids = docUnids & vbCrLf
+      outputXMLPath = outputXMLFolder & "\" & unid & ".csv"
+      Set file = fso.CreateTextFile( outputXMLPath, True, False )
+      file.Write( docUnids )
+      file.Close
     Next
     
     'Folders
@@ -169,6 +203,34 @@ Else
       outputXMLPath = outputXMLFolder & "\" & unid & ".xml"
       Set file = fso.CreateTextFile( outputXMLPath, True, False )
       file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & obj.xml )
+      file.Close
+      
+      docUnids = ""
+      name = GetName( obj )
+      Set objNotesView = objNotesDb.getView( name )
+      Set objNotesViewEntryCollection = objNotesView.AllEntries
+      vcc = 1
+      
+      Set objNotesDoc = objNotesView.GetFirstDocument()
+      While Not ( objNotesDoc Is Nothing )
+        If docUnids = "" Then
+          docUnids = objNotesDoc.UniversalID
+        Else
+          docUnids = docUnids & vbCrLf & objNotesDoc.UniversalID
+        End If
+        
+        Set objNotesViewEntry = objNotesViewEntryCollection.getNthEntry( vcc )
+        cv = objNotesViewEntry.ColumnValues
+        docUnids = docUnids & "," & Join( cv, "," )
+        
+        Set objNotesDoc = objNotesView.GetNextDocument( objNotesDoc )
+        vcc = vcc + 1
+      Wend
+      
+      docUnids = docUnids & vbCrLf
+      outputXMLPath = outputXMLFolder & "\" & unid & ".csv"
+      Set file = fso.CreateTextFile( outputXMLPath, True, False )
+      file.Write( docUnids )
       file.Close
     Next
     
@@ -276,5 +338,18 @@ Function GetUNID( o )
   Next
   
   GetUNID = uid
+End Function
+
+Function GetName( o )
+  Dim n
+  Dim nodeList, obj
+  
+  n = ""
+  Set nodeList = o.selectNodes( "@name" )
+  For Each obj in nodeList
+    n = obj.text
+  Next
+  
+  GetName = n
 End Function
 

@@ -119,6 +119,10 @@ Else
       unid = GetUNID( obj )
       
       outputXMLPath = outputXMLFolder & "\" & unid & ".xml"
+      'CreateTextFile の第３パラメータは文字コード（True:Unicode, False:Ascii　デフォルトは False）
+      'DXL 全体をテキストファイルとして書き出す場合はこれでよかった（文字化けしなかった）
+      'Document などを取り出して保存しようとすると、このタイミングで文字化けを起こしている？
+      'https://teratail.com/questions/290223
       Set file = fso.CreateTextFile( outputXMLPath, True, False )
       file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & obj.xml )
       file.Close

@@ -13,7 +13,7 @@ Dim objNotesViewEntryCollection
 Dim objNotesDoc
 Dim nc
 Dim dxlExporter
-Dim dxl
+Dim dxl, xml
 
 Dim objXML
 Dim nodeList, obj, unid, name, nodeList0, obj0
@@ -25,7 +25,7 @@ Dim outputFilePath, outputXMLPath
 Dim fso
 Dim file
 
-Dim tmpArr, tmpStr, tmpInt, tmpBool
+Dim tmpArr, tmpStr, tmpInt, tmpBool, tmpV
 Dim tmpDArr
 
 Set objArgs = Wscript.Arguments
@@ -116,6 +116,12 @@ Else
     For Each obj In nodeList
       'Wscript.Echo obj.nodeName '"document"
       'Wscript.Echo obj.xml
+      
+      '"xmlns" 属性を削除する
+      xml = obj.xml
+      tmpArr = Split( xml, " xmlns=""http://www.lotus.com/dxl""" )
+      xml = Join( tmpArr, "" )
+      
       unid = GetUNID( obj )
       
       outputXMLPath = outputXMLFolder & "\" & unid & ".xml"
@@ -124,7 +130,7 @@ Else
       'Document などを取り出して保存しようとすると、このタイミングで文字化けを起こしている？
       'https://teratail.com/questions/290223
       Set file = fso.CreateTextFile( outputXMLPath, True, False )
-      file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & obj.xml )
+      file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & xml )
       file.Close
     Next
     
@@ -138,11 +144,16 @@ Else
     For Each obj In nodeList
       'Wscript.Echo obj.nodeName '"form"
       'Wscript.Echo obj.xml
+
+      xml = obj.xml
+      tmpArr = Split( xml, " xmlns=""http://www.lotus.com/dxl""" )
+      xml = Join( tmpArr, "" )
+
       unid = GetUNID( obj )
       
       outputXMLPath = outputXMLFolder & "\" & unid & ".xml"
       Set file = fso.CreateTextFile( outputXMLPath, True, False )
-      file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & obj.xml )
+      file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & xml )
       file.Close
     Next
     
@@ -156,11 +167,16 @@ Else
     For Each obj In nodeList
       'Wscript.Echo obj.nodeName '"view"
       'Wscript.Echo obj.xml
+
+      xml = obj.xml
+      tmpArr = Split( xml, " xmlns=""http://www.lotus.com/dxl""" )
+      xml = Join( tmpArr, "" )
+
       unid = GetUNID( obj )
       
       outputXMLPath = outputXMLFolder & "\" & unid & ".xml"
       Set file = fso.CreateTextFile( outputXMLPath, True, False )
-      file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & obj.xml )
+      file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & xml )
       file.Close
       
       docUnids = ""
@@ -202,11 +218,16 @@ Else
     For Each obj In nodeList
       'Wscript.Echo obj.nodeName '"folder"
       'Wscript.Echo obj.xml
+
+      xml = obj.xml
+      tmpArr = Split( xml, " xmlns=""http://www.lotus.com/dxl""" )
+      xml = Join( tmpArr, "" )
+
       unid = GetUNID( obj )
       
       outputXMLPath = outputXMLFolder & "\" & unid & ".xml"
       Set file = fso.CreateTextFile( outputXMLPath, True, False )
-      file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & obj.xml )
+      file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & xml )
       file.Close
       
       docUnids = ""
@@ -248,11 +269,16 @@ Else
     For Each obj In nodeList
       'Wscript.Echo obj.nodeName '"sharedfield"
       'Wscript.Echo obj.xml
+
+      xml = obj.xml
+      tmpArr = Split( xml, " xmlns=""http://www.lotus.com/dxl""" )
+      xml = Join( tmpArr, "" )
+
       unid = GetUNID( obj )
       
       outputXMLPath = outputXMLFolder & "\" & unid & ".xml"
       Set file = fso.CreateTextFile( outputXMLPath, True, False )
-      file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & obj.xml )
+      file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & xml )
       file.Close
     Next
     
@@ -266,11 +292,16 @@ Else
     For Each obj In nodeList
       'Wscript.Echo obj.nodeName '"subform"
       'Wscript.Echo obj.xml
+
+      xml = obj.xml
+      tmpArr = Split( xml, " xmlns=""http://www.lotus.com/dxl""" )
+      xml = Join( tmpArr, "" )
+
       unid = GetUNID( obj )
       
       outputXMLPath = outputXMLFolder & "\" & unid & ".xml"
       Set file = fso.CreateTextFile( outputXMLPath, True, False )
-      file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & obj.xml )
+      file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & xml )
       file.Close
     Next
     
@@ -284,11 +315,16 @@ Else
     For Each obj In nodeList
       'Wscript.Echo obj.nodeName '"imageresource"
       'Wscript.Echo obj.xml
+
+      xml = obj.xml
+      tmpArr = Split( xml, " xmlns=""http://www.lotus.com/dxl""" )
+      xml = Join( tmpArr, "" )
+
       unid = GetUNID( obj )
       
       outputXMLPath = outputXMLFolder & "\" & unid & ".xml"
       Set file = fso.CreateTextFile( outputXMLPath, True, False )
-      file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & obj.xml )
+      file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & xml )
       file.Close
     Next
 
@@ -305,11 +341,16 @@ Else
       Set nodeList0 = obj.selectNodes( "@class" )
       For Each obj0 In nodeList0
         If obj0.text = "icon" Then
+
+          xml = obj.xml
+          tmpArr = Split( xml, " xmlns=""http://www.lotus.com/dxl""" )
+          xml = Join( tmpArr, "" )
+
           unid = GetUNID( obj )
       
           outputXMLPath = outputXMLFolder & "\" & unid & ".xml"
           Set file = fso.CreateTextFile( outputXMLPath, True, False )
-          file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & obj.xml )
+          file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & xml )
           file.Close
         End If
       Next

@@ -28,13 +28,26 @@ Dim file
 Dim tmpArr, tmpStr, tmpInt, tmpBool, tmpV
 Dim tmpDArr
 
+Dim i, exportDoc
+
+exportDoc = True
+objDbPath = ""
+
 Set objArgs = Wscript.Arguments
-If objArgs.Count = 0 Then
+
+For i = 0 To objArgs.Count - 1
+  If objArgs(i) = "-nodocs" Then
+    exportDoc = False
+  Else
+    'local database filepath
+    objDbPath = objArgs(i)
+  End If
+Next i
+
+
+If objDbPath = "" Then
   Wscript.Echo "Please specify local database path as command line parameter."
 Else
-  'local database filepath
-  objDbPath = objArgs(0)
-  
   'normalize DB filepath
   tmpArr = Split( objDbPath, "\" )
   objDbPath = Join( tmpArr, "/" )
@@ -67,7 +80,7 @@ Else
   nc.SelectAgents = False               'Agents
   nc.SelectDatabaseScript = False       'DatabaseScript
   nc.SelectDataConnections = False      'DataConnections
-  nc.SelectDocuments = True             'Documents
+  nc.SelectDocuments = exportDoc        'Documents
   nc.SelectFolders = True               'Folders
   nc.SelectForms = True                 'Forms
   nc.SelectFrameSets = False            'Framesets
@@ -106,33 +119,6 @@ Else
   Set objXML = WScript.CreateObject( "MSXML2.DOMDocument" )
   tmpBool = objXML.loadXML( dxl )
   If tmpBool = True Then
-    'Documents
-    outputXMLFolder = outputFileFolder & "\documents" 
-    If fso.FolderExists( outputXMLFolder ) = False Then
-      fso.CreateFolder( outputXMLFolder )
-    End If
-    
-    Set nodeList = objXML.DocumentElement.selectNodes( "/database/document" )
-    For Each obj In nodeList
-      'Wscript.Echo obj.nodeName '"document"
-      'Wscript.Echo obj.xml
-      
-      '"xmlns" 属性を削除する
-      xml = obj.xml
-      tmpArr = Split( xml, " xmlns=""http://www.lotus.com/dxl""" )
-      xml = Join( tmpArr, "" )
-      
-      unid = GetUNID( obj )
-      
-      outputXMLPath = outputXMLFolder & "\" & unid & ".xml"
-      'CreateTextFile の第３パラメータは文字コード（True:Unicode, False:Ascii　デフォルトは False）
-      'DXL 全体をテキストファイルとして書き出す場合はこれでよかった（文字化けしなかった）
-      'Document などを取り出して保存しようとすると、このタイミングで文字化けを起こしている？
-      'https://teratail.com/questions/290223
-      Set file = fso.CreateTextFile( outputXMLPath, True, False )
-      file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & xml )
-      file.Close
-    Next
     
     'Forms
     outputXMLFolder = outputFileFolder & "\forms" 
@@ -155,6 +141,32 @@ Else
       Set file = fso.CreateTextFile( outputXMLPath, True, False )
       file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & xml )
       file.Close
+    Next
+
+    'Documents
+    outputXMLFolder = outputFileFolder & "\documents" 
+    If fso.FolderExists( outputXMLFolder ) = False Then
+      fso.CreateFolder( outputXMLFolder )
+    End If
+    
+    Set nodeList = objXML.DocumentElement.selectNodes( "/database/document" )
+    For Each obj In nodeList
+      'Wscript.Echo obj.nodeName '"document"
+      'Wscript.Echo obj.xml
+      
+      '"xmlns" 属性を削除する
+      xml = obj.xml
+      tmpArr = Split( xml, " xmlns=""http://www.lotus.com/dxl""" )
+      xml = Join( tmpArr, "" )
+      
+      unid = GetUNID( obj )
+      
+      outputXMLPath = outputXMLFolder & "\" & unid & ".xml"
+      Set file = fso.CreateTextFile( outputXMLPath, True, False )
+      file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & xml )
+      file.Close
+      
+      Call CharSetConv( outputXMLPath, utf8XMLPath, "Shift_JIS", "UTF-8" )
     Next
     
     'Views
@@ -396,5 +408,18 @@ Function GetName( o )
   Next
   
   GetName = n
+End Function
+
+Function GetForm( o )
+  Dim f
+  Dim nodeList, obj
+  
+  n = ""
+  Set nodeList = o.selectNodes( "@form" )
+  For Each obj in nodeList
+    f = obj.text
+  Next
+  
+  GetForm = f
 End Function
 

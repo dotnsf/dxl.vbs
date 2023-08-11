@@ -119,6 +119,74 @@ Else
   Set objXML = WScript.CreateObject( "MSXML2.DOMDocument" )
   tmpBool = objXML.loadXML( dxl )
   If tmpBool = True Then
+    'Imageresources
+    outputXMLFolder = outputFileFolder & "\imageresources" 
+    If fso.FolderExists( outputXMLFolder ) = False Then
+      fso.CreateFolder( outputXMLFolder )
+    End If
+    
+    Set nodeList = objXML.DocumentElement.selectNodes( "/database/imageresource" )
+    For Each obj In nodeList
+      'Wscript.Echo obj.nodeName '"imageresource"
+      'Wscript.Echo obj.xml
+
+      xml = obj.xml
+      tmpArr = Split( xml, " xmlns=""http://www.lotus.com/dxl""" )
+      xml = Join( tmpArr, "" )
+
+      unid = GetUNID( obj )
+      
+      outputXMLPath = outputXMLFolder & "\" & unid & ".xml"
+      Set file = fso.CreateTextFile( outputXMLPath, True, False )
+      file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & xml )
+      file.Close
+    Next
+
+    'Sharedfields
+    outputXMLFolder = outputFileFolder & "\sharedfields" 
+    If fso.FolderExists( outputXMLFolder ) = False Then
+      fso.CreateFolder( outputXMLFolder )
+    End If
+    
+    Set nodeList = objXML.DocumentElement.selectNodes( "/database/sharedfield" )
+    For Each obj In nodeList
+      'Wscript.Echo obj.nodeName '"sharedfield"
+      'Wscript.Echo obj.xml
+
+      xml = obj.xml
+      tmpArr = Split( xml, " xmlns=""http://www.lotus.com/dxl""" )
+      xml = Join( tmpArr, "" )
+
+      unid = GetUNID( obj )
+      
+      outputXMLPath = outputXMLFolder & "\" & unid & ".xml"
+      Set file = fso.CreateTextFile( outputXMLPath, True, False )
+      file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & xml )
+      file.Close
+    Next
+    
+    'Subforms
+    outputXMLFolder = outputFileFolder & "\subforms" 
+    If fso.FolderExists( outputXMLFolder ) = False Then
+      fso.CreateFolder( outputXMLFolder )
+    End If
+    
+    Set nodeList = objXML.DocumentElement.selectNodes( "/database/subform" )
+    For Each obj In nodeList
+      'Wscript.Echo obj.nodeName '"subform"
+      'Wscript.Echo obj.xml
+
+      xml = obj.xml
+      tmpArr = Split( xml, " xmlns=""http://www.lotus.com/dxl""" )
+      xml = Join( tmpArr, "" )
+
+      unid = GetUNID( obj )
+      
+      outputXMLPath = outputXMLFolder & "\" & unid & ".xml"
+      Set file = fso.CreateTextFile( outputXMLPath, True, False )
+      file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & xml )
+      file.Close
+    Next
     
     'Forms
     outputXMLFolder = outputFileFolder & "\forms" 
@@ -284,75 +352,6 @@ Else
       outputXMLPath = outputXMLFolder & "\" & unid & ".csv"
       Set file = fso.CreateTextFile( outputXMLPath, True, False )
       file.Write( docUnids )
-      file.Close
-    Next
-    
-    'Sharedfields
-    outputXMLFolder = outputFileFolder & "\sharedfields" 
-    If fso.FolderExists( outputXMLFolder ) = False Then
-      fso.CreateFolder( outputXMLFolder )
-    End If
-    
-    Set nodeList = objXML.DocumentElement.selectNodes( "/database/sharedfield" )
-    For Each obj In nodeList
-      'Wscript.Echo obj.nodeName '"sharedfield"
-      'Wscript.Echo obj.xml
-
-      xml = obj.xml
-      tmpArr = Split( xml, " xmlns=""http://www.lotus.com/dxl""" )
-      xml = Join( tmpArr, "" )
-
-      unid = GetUNID( obj )
-      
-      outputXMLPath = outputXMLFolder & "\" & unid & ".xml"
-      Set file = fso.CreateTextFile( outputXMLPath, True, False )
-      file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & xml )
-      file.Close
-    Next
-    
-    'Subforms
-    outputXMLFolder = outputFileFolder & "\subforms" 
-    If fso.FolderExists( outputXMLFolder ) = False Then
-      fso.CreateFolder( outputXMLFolder )
-    End If
-    
-    Set nodeList = objXML.DocumentElement.selectNodes( "/database/subform" )
-    For Each obj In nodeList
-      'Wscript.Echo obj.nodeName '"subform"
-      'Wscript.Echo obj.xml
-
-      xml = obj.xml
-      tmpArr = Split( xml, " xmlns=""http://www.lotus.com/dxl""" )
-      xml = Join( tmpArr, "" )
-
-      unid = GetUNID( obj )
-      
-      outputXMLPath = outputXMLFolder & "\" & unid & ".xml"
-      Set file = fso.CreateTextFile( outputXMLPath, True, False )
-      file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & xml )
-      file.Close
-    Next
-    
-    'Imageresources
-    outputXMLFolder = outputFileFolder & "\imageresources" 
-    If fso.FolderExists( outputXMLFolder ) = False Then
-      fso.CreateFolder( outputXMLFolder )
-    End If
-    
-    Set nodeList = objXML.DocumentElement.selectNodes( "/database/imageresource" )
-    For Each obj In nodeList
-      'Wscript.Echo obj.nodeName '"imageresource"
-      'Wscript.Echo obj.xml
-
-      xml = obj.xml
-      tmpArr = Split( xml, " xmlns=""http://www.lotus.com/dxl""" )
-      xml = Join( tmpArr, "" )
-
-      unid = GetUNID( obj )
-      
-      outputXMLPath = outputXMLFolder & "\" & unid & ".xml"
-      Set file = fso.CreateTextFile( outputXMLPath, True, False )
-      file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & xml )
       file.Close
     Next
 

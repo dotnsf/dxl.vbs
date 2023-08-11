@@ -1,5 +1,5 @@
-' dxl_2web.vbs
-' Execute: c:\Windows\SysWOW64\CScript //nologo dxl_2web.vbs path/xxxxx.nsf
+' nsf2dxl.vbs
+' Execute: c:\Windows\SysWOW64\CScript //nologo nsf2dxl.vbs (-nodocs) path/xxxxx.nsf
 Option Explicit
 
 Dim objWsh

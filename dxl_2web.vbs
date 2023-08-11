@@ -17,7 +17,7 @@ Dim dxl, xml
 
 Dim objXML
 Dim nodeList, obj, unid, name, nodeList0, obj0
-Dim docUnids, formNames
+Dim docUnids, formNames, imageresourceNames, sharedfieldNames, subformNames
 Dim vcc, cv
 
 Dim outputFileFolder, outputXMLFolder
@@ -140,7 +140,25 @@ Else
       Set file = fso.CreateTextFile( outputXMLPath, True, False )
       file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & xml )
       file.Close
+      
+      'CSV
+      Dim imageresourceName
+      imageresourceName = GetName( obj )
+      imageresourceNames = imageresourceNames & imageresourceName & "," & unid & vbCrLf
+      imageresourceName = GetAlias( obj )
+      If imageresourceName <> "" Then
+        tmpArr = Split( imageresourceName, "|" )
+        For i = LBound(tmpArr) To UBound(tmpArr)
+          tmpStr = Trim(tmpArr(i))
+          imageresourceNames = imageresourceNames & tmpStr & "," & unid & vbCrLf
+        Next
+      End If
     Next
+    
+    outputXMLPath = outputXMLFolder & "\imageresourcenames.csv"
+    Set file = fso.CreateTextFile( outputXMLPath, True, False )
+    file.Write( imageresourceNames )
+    file.Close
 
     'Sharedfields
     outputXMLFolder = outputFileFolder & "\sharedfields" 
@@ -163,7 +181,25 @@ Else
       Set file = fso.CreateTextFile( outputXMLPath, True, False )
       file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & xml )
       file.Close
+      
+      'CSV
+      Dim sharedfieldName
+      sharedfieldName = GetName( obj )
+      sharedfieldNames = sharedfieldNames & sharedfieldName & "," & unid & vbCrLf
+      sharedfieldName = GetAlias( obj )
+      If sharedfieldName <> "" Then
+        tmpArr = Split( sharedfieldName, "|" )
+        For i = LBound(tmpArr) To UBound(tmpArr)
+          tmpStr = Trim(tmpArr(i))
+          sharedfieldNames = sharedfieldNames & tmpStr & "," & unid & vbCrLf
+        Next
+      End If
     Next
+    
+    outputXMLPath = outputXMLFolder & "\sharedfieldnames.csv"
+    Set file = fso.CreateTextFile( outputXMLPath, True, False )
+    file.Write( sharedfieldNames )
+    file.Close
     
     'Subforms
     outputXMLFolder = outputFileFolder & "\subforms" 
@@ -186,7 +222,25 @@ Else
       Set file = fso.CreateTextFile( outputXMLPath, True, False )
       file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & xml )
       file.Close
+      
+      'CSV
+      Dim subformName
+      subformName = GetName( obj )
+      subformNames = subformNames & subformName & "," & unid & vbCrLf
+      subformName = GetAlias( obj )
+      If subformName <> "" Then
+        tmpArr = Split( subformName, "|" )
+        For i = LBound(tmpArr) To UBound(tmpArr)
+          tmpStr = Trim(tmpArr(i))
+          subformNames = subformNames & tmpStr & "," & unid & vbCrLf
+        Next
+      End If
     Next
+    
+    outputXMLPath = outputXMLFolder & "\subformnames.csv"
+    Set file = fso.CreateTextFile( outputXMLPath, True, False )
+    file.Write( subformNames )
+    file.Close
     
     'Forms
     outputXMLFolder = outputFileFolder & "\forms" 
@@ -211,6 +265,7 @@ Else
       file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & xml )
       file.Close
       
+      'CSV
       Dim formName
       formName = GetName( obj )
       formNames = formNames & formName & "," & unid & vbCrLf
@@ -223,7 +278,7 @@ Else
         Next
       End If
     Next
-      
+    
     outputXMLPath = outputXMLFolder & "\formnames.csv"
     Set file = fso.CreateTextFile( outputXMLPath, True, False )
     file.Write( formNames )

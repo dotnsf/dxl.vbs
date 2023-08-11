@@ -17,7 +17,7 @@ Dim dxl, xml
 
 Dim objXML
 Dim nodeList, obj, unid, name, nodeList0, obj0
-Dim docUnids
+Dim docUnids, formNames
 Dim vcc, cv
 
 Dim outputFileFolder, outputXMLFolder
@@ -42,7 +42,7 @@ For i = 0 To objArgs.Count - 1
     'local database filepath
     objDbPath = objArgs(i)
   End If
-Next i
+Next
 
 
 If objDbPath = "" Then
@@ -126,6 +126,7 @@ Else
       fso.CreateFolder( outputXMLFolder )
     End If
     
+    formNames = ""
     Set nodeList = objXML.DocumentElement.selectNodes( "/database/form" )
     For Each obj In nodeList
       'Wscript.Echo obj.nodeName '"form"
@@ -141,7 +142,24 @@ Else
       Set file = fso.CreateTextFile( outputXMLPath, True, False )
       file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & xml )
       file.Close
+      
+      Dim formName
+      formName = GetName( obj )
+      formNames = formNames & formName & "," & unid & vbCrLf
+      formName = GetAlias( obj )
+      If formName <> "" Then
+        tmpArr = Split( formName, "|" )
+        For i = LBound(tmpArr) To UBound(tmpArr)
+          tmpStr = Trim(tmpArr(i))
+          formNames = formNames & tmpStr & "," & unid & vbCrLf
+        Next
+      End If
     Next
+      
+    outputXMLPath = outputXMLFolder & "\formnames.csv"
+    Set file = fso.CreateTextFile( outputXMLPath, True, False )
+    file.Write( formNames )
+    file.Close
 
     'Documents
     outputXMLFolder = outputFileFolder & "\documents" 
@@ -165,8 +183,6 @@ Else
       Set file = fso.CreateTextFile( outputXMLPath, True, False )
       file.Write( "<?xml version='1.0' encoding='SHIFT_JIS'?>" & xml )
       file.Close
-      
-      Call CharSetConv( outputXMLPath, utf8XMLPath, "Shift_JIS", "UTF-8" )
     Next
     
     'Views
@@ -408,6 +424,19 @@ Function GetName( o )
   Next
   
   GetName = n
+End Function
+
+Function GetAlias( o )
+  Dim a
+  Dim nodeList, obj
+  
+  a = ""
+  Set nodeList = o.selectNodes( "@alias" )
+  For Each obj in nodeList
+    a = obj.text
+  Next
+  
+  GetAlias = a
 End Function
 
 Function GetForm( o )
